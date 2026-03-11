@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,13 @@
             --white: #F8FAFC;
             --accent-purple: #A78BFA;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, var(--navy) 0%, var(--purple) 50%, var(--charcoal) 100%);
@@ -20,410 +27,790 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
         .container {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 40px 20px 20px;
+            position: relative;
         }
-        .page { display: none; width: 100%; max-width: 500px; animation: fadeIn 0.5s ease-in-out; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity:1; transform:translateY(0);} }
-        h1 {
-            font-size: clamp(1.8rem, 5vw, 2.5rem);
-            text-align: center;
-            margin-bottom: 2rem;
+
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 40px;            /* logo pushed a bit further down */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 70px;
+            width: auto;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5),
+                        0 0 0 1px rgba(139, 92, 246, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .logo-fallback {
+            font-size: 2.2rem;
+            font-weight: 800;
             background: linear-gradient(45deg, var(--purple), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            padding: 12px 20px;
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo-fallback:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5),
+                        0 0 0 1px rgba(139, 92, 246, 0.3),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            text-align: center;
+            margin-top: 140px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--purple);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, var(--purple), var(--accent-purple));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: auto;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tile {
+            aspect-ratio: 1;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display:block; margin-bottom:0.5rem; font-weight:500; }
-        input {
-            width:100%; padding:1rem; border:2px solid transparent; border-radius:12px;
-            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-            color: var(--white); font-size:1rem; transition: all 0.3s ease;
+
+        .tile.unlocked {
+            background: linear-gradient(135deg, var(--purple), var(--accent-purple));
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
         }
-        input:focus {
-            outline:none; border-color: var(--purple);
-            box-shadow: 0 0 20px rgba(139,92,246,0.4);
-            background: rgba(255,255,255,0.15);
+
+        .tile.unlocked:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 25px 50px rgba(139, 92, 246, 0.6);
         }
-        input::placeholder { color: rgba(255,255,255,0.6); }
-        .btn {
-            width:100%; padding:1rem 2rem;
-            background: linear-gradient(45deg, var(--purple), var(--accent-purple));
-            color:white; border:none; border-radius:12px;
-            font-size:1.1rem; font-weight:600; cursor:pointer;
-            transition: all 0.3s ease; text-transform:uppercase; letter-spacing:1px; margin-top:1rem;
+
+        .tile.locked {
+            background: var(--charcoal);
+            cursor: not-allowed;
+            opacity: 0.6;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow:0 10px 30px rgba(139,92,246,0.4); }
-        .back-btn { position:absolute; top:20px; left:20px; width:auto; padding:0.8rem 1.5rem; font-size:0.9rem; }
-        .tiles-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap:1.5rem; margin:2rem 0; }
-        .tile {
-            aspect-ratio:1; border-radius:20px; display:flex; flex-direction:column;
-            align-items:center; justify-content:center; font-size:1.2rem; font-weight:bold;
-            text-transform:uppercase; letter-spacing:2px; cursor:pointer; transition: all 0.4s ease;
-            position:relative; overflow:hidden;
+
+        .tile.locked:hover {
+            transform: none;
+            box-shadow: none;
         }
-        .tile.unlocked { background: linear-gradient(135deg, var(--purple), var(--accent-purple)); box-shadow:0 15px 40px rgba(139,92,246,0.4); }
-        .tile.unlocked:hover { transform: scale(1.05) rotate(2deg); box-shadow:0 25px 50px rgba(139,92,246,0.6); }
-        .tile.locked { background: var(--charcoal); cursor:not-allowed; opacity:0.6; }
-        .tile.locked:hover { transform:none; box-shadow:none; }
-        .lock-icon { font-size:2.5rem; margin-bottom:0.5rem; filter: grayscale(1); animation: lockPulse 2s ease-in-out infinite; }
-        @keyframes lockPulse { 0%,100%{transform:scale(1) rotate(0); opacity:0.7;} 50%{transform:scale(1.2) rotate(10deg); opacity:1;} }
+
+        .lock-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            filter: grayscale(1);
+            animation: lockPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes lockPulse {
+            0%,
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.2) rotate(10deg);
+                opacity: 1;
+            }
+        }
+
         .question-block {
-            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
-            border-radius:20px; padding:1.5rem; margin-bottom:1rem;
-            border:1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .question-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
-        .question-title { font-size:1.2rem; font-weight:600; }
-        .countdown { font-size:1.1rem; font-weight:600; color:#FFD700; min-width:80px; text-align:right; }
-        .countdown.warning { color:#FFA500; }
-        .countdown.danger { color:#FF4444; animation: pulse 1s infinite; }
-        @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
-        .options { display:flex; flex-direction:column; gap:0.8rem; }
-        .option { padding:1rem; background: rgba(255,255,255,0.05); border-radius:12px; cursor:pointer; transition: all 0.3s ease; border:2px solid transparent; }
-        .option:hover { background: rgba(139,92,246,0.2); border-color: var(--purple); }
-        .option.selected { background: var(--purple); box-shadow:0 0 20px rgba(139,92,246,0.4); }
-        .leaderboard { display:grid; grid-template-columns:1fr 1fr; gap:2rem; width:100%; }
-        .leaderboard-block { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius:20px; padding:2rem; border:1px solid rgba(255,255,255,0.1); }
-        .leaderboard h3 { text-align:center; margin-bottom:1.5rem; font-size:1.3rem; color: var(--accent-purple); }
-        .player-row { display:flex; justify-content:space-between; padding:1rem; margin-bottom:0.5rem; background: rgba(255,255,255,0.05); border-radius:10px; transition: all 0.3s ease; }
-        .player-row:hover { background: rgba(139,92,246,0.2); }
-        .rank { font-weight:bold; color: var(--accent-purple); font-size:1.2rem; }
-        .me { border:2px solid var(--purple); box-shadow:0 0 20px rgba(139,92,246,0.3); }
-        .modal { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center; }
-        .modal-content { background: var(--charcoal); padding:2rem; border-radius:20px; text-align:center; max-width:300px; animation:bounce 0.3s ease; }
-        @keyframes bounce { 0%{transform:scale(0.8);} 50%{transform:scale(1.1);} 100%{transform:scale(1);} }
-        @media (max-width:768px){ .leaderboard{grid-template-columns:1fr;} .tiles-grid{grid-template-columns:repeat(2,1fr);} }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .countdown {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #FFD700;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .countdown.warning {
+            color: #FFA500;
+        }
+
+        .countdown.danger {
+            color: #FF4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .option {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--purple);
+        }
+
+        .option.selected {
+            background: var(--purple);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .leaderboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .leaderboard-block {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .leaderboard h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            color: var(--accent-purple);
+        }
+
+        .player-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .player-row:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .rank {
+            font-weight: bold;
+            color: var(--accent-purple);
+            font-size: 1.2rem;
+        }
+
+        .me {
+            border: 2px solid var(--purple);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--charcoal);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 300px;
+            animation: bounce 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: scale(0.8);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .leaderboard-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, text-shadow 0.2s ease;
+            z-index: 100;
+        }
+
+        .leaderboard-icon:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width:768px) {
+            .leaderboard {
+                grid-template-columns: 1fr;
+            }
+            .tiles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
+
 <body>
-<div class="container">
-
-    <!-- Page 1 -->
-    <div id="page1" class="page active">
-        <h1>VUCA QUEST</h1>
-        <form id="userForm">
-            <div class="form-group">
-                <label>Name *</label>
-                <input type="text" id="name" placeholder="Enter your name" required>
+    <div class="container">
+        <div id="page1" class="page active">
+            <div class="top-bar">
+                <svg class="logo" viewBox="0 0 200 50" fill="none">
+                    <rect width="200" height="50" rx="8" fill="url(#grad)" />
+                    <path d="M20 15 L30 25 L40 15 M50 15 L60 25 L70 15 M80 25 L90 15 L100 25 M110 15 L120 25 L130 15 M140 25 L150 15 L160 25" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    <text x="20" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">RP TECH</text>
+                    <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#8B5CF6" />
+                            <stop offset="100%" stop-color="#A78BFA" />
+                        </linearGradient>
+                    </defs>
+                </svg>
             </div>
-            <div class="form-group">
-                <label>Surname *</label>
-                <input type="text" id="surname" placeholder="Enter your surname" required>
+            <h1>VUCA QUEST</h1>
+            <form id="userForm">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" id="name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Surname *</label>
+                    <input type="text" id="surname" placeholder="Enter your surname" required>
+                </div>
+                <div class="form-group">
+                    <label>Company Email *</label>
+                    <input type="email" id="email"
+                           pattern="^[a-zA-Z0-9._%+-]+@(?!(gmail|yahoo|outlook|hotmail)\.com$)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                           placeholder="yourname@company.com" required>
+                </div>
+                <button type="submit" class="btn">Enter VUCA World</button>
+            </form>
+        </div>
+        <div id="page2" class="page">
+            <div class="top-bar">
+                <img src="RP tech Logo.png" alt="RP Tech Logo" class="logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                <img src="RP%20tech%20Logo.png" alt="RP Tech Logo" class="logo" style="display:none;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                <img src="rp-tech-logo.png" alt="RP Tech Logo" class="logo" style="display:none;" onerror="this.nextElementSibling.classList.remove('logo-fallback');">
+                <div class="logo-fallback" style="display:none;">🚀 RP</div>
             </div>
-            <div class="form-group">
-                <label>Company Email *</label>
-                <input type="email" id="email"
-                       pattern="^[a-zA-Z0-9._%+-]+@(?!(gmail|yahoo|outlook|hotmail)\.com$)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                       placeholder="yourname@company.com" required>
+            <h1>DIVE IN THE VUCA ZONE</h1>
+            <!-- removed onclick here -->
+            <div class="leaderboard-icon" title="View Leaderboard">⭐</div>
+            <div class="tiles-grid">
+                <div class="tile unlocked" data-level="1">
+                    <div>LEVEL 1</div>
+                </div>
+                <div class="tile locked" data-level="2">
+                    <div class="lock-icon">🔒</div>
+                    <div>LEVEL 2</div>
+                </div>
+                <div class="tile locked" data-level="3">
+                    <div class="lock-icon">🔒</div>
+                    <div>LEVEL 3</div>
+                </div>
+                               <div class="tile locked" data-level="4">
+                    <div class="lock-icon">🔒</div>
+                    <div>LEVEL 4</div>
+                </div>
             </div>
-            <button type="submit" class="btn">Enter VUCA World</button>
-        </form>
+        </div>
+        <div id="page3" class="page">
+            <button class="back-btn btn" onclick="vucaQuest.goToPage(2)">← Back to Levels</button>
+            <h1 id="quizTitle">Level Challenge</h1>
+            <div id="questionContainer"></div>
+            <button id="questionSubmit" class="btn" style="display:none;">Submit Answer</button>
+        </div>
+        <div id="page4" class="page">
+            <button class="back-btn btn" onclick="vucaQuest.goToPage(2)">← Back to Levels</button>
+            <h1>VUCA Leaderboard</h1>
+            <div class="leaderboard">
+                <div class="leaderboard-block">
+                    <h3>🏆 Top 5 Elite</h3>
+                    <div id="top5"></div>
+                </div>
+                <div class="leaderboard-block">
+                    <h3>🏅 Your Rank</h3>
+                    <div id="myRank"></div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- Page 2 -->
-    <div id="page2" class="page">
-        <h1>DIVE IN THE VUCA ZONE</h1>
-        <div class="tiles-grid">
-            <div class="tile unlocked" data-level="1"><div>LEVEL 1</div></div>
-            <div class="tile locked" data-level="2"><div class="lock-icon">🔒</div><div>LEVEL 2</div></div>
-            <div class="tile locked" data-level="3"><div class="lock-icon">🔒</div><div>LEVEL 3</div></div>
-            <div class="tile locked" data-level="4"><div class="lock-icon">🔒</div><div>LEVEL 4</div></div>
+    <div id="lockModal" class="modal">
+        <div class="modal-content">
+            <div style="font-size:3rem; margin-bottom:1rem;">🔒</div>
+            <h2>Oops! Level Locked!</h2>
+            <p>Please wait for unlock time</p>
+            <button class="btn" onclick="document.getElementById('lockModal').style.display='none'">Close</button>
         </div>
     </div>
 
-    <!-- Page 3 -->
-    <div id="page3" class="page">
-        <button class="back-btn btn" onclick="vucaQuest.goToPage(2)">← Back to Levels</button>
-        <h1 id="quizTitle">Level Challenge</h1>
-        <div id="questionContainer"></div>
-        <button id="questionSubmit" class="btn" style="display:none;">Submit Answer</button>
-    </div>
-
-    <!-- Page 4 -->
-    <div id="page4" class="page">
-        <button class="back-btn btn" onclick="vucaQuest.goToPage(2)">← Back to Levels</button>
-        <h1>VUCA Leaderboard</h1>
-        <div class="leaderboard">
-            <div class="leaderboard-block">
-                <h3>🏆 Top 5 Elite</h3>
-                <div id="top5"></div>
-            </div>
-            <div class="leaderboard-block">
-                <h3>🌟 Your Rank</h3>
-                <div id="myRank"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div id="lockModal" class="modal">
-    <div class="modal-content">
-        <div style="font-size:3rem; margin-bottom:1rem;">🔒</div>
-        <h2>Oops! Level Locked!</h2>
-        <p>Please wait for unlock time</p>
-        <button class="btn" onclick="document.getElementById('lockModal').style.display='none'">Close</button>
-    </div>
-</div>
-
-<script>
-class VucaQuest {
-    constructor(){
-        this.currentLevel=null;
-        this.currentQuestion=0;
-        this.quizStartTime=null;
-        this.selectedAnswers={};
-        this.timer=null;
-
-        this.questionsData={
-            1:[
-                { text:"What is Volatility?", options:["Dynamic Conditions","Market Fluctuation","Instability","Rapid Change"], scores:[20,45,30,5]},
-                { text:"What is Vision?", options:["Organizational Purpose","Strategic Direction","Long-term Aspiration","Future Outlook"], scores:[5,45,30,20]}
-            ],
-            2:[
-                { text:"What is Uncertainty?", options:["Predictability Limits","Information Gaps","Outcome Variability","Risk Exposure"], scores:[20,30,45,5]},
-                { text:"What is Understanding?", options:["Knowledge Depth","Situational Awareness","Context Recognition","Insight Development"], scores:[20,45,5,30]}
-            ],
-            3:[
-                { text:"What is Complexity?", options:["Process Intricacy","Structural Layers","Interconnected Systems","Multiple Variables"], scores:[30,5,45,20]},
-                { text:"What is Clarity?", options:["Transparent Processes","Focused Messaging","Defined Objectives","Clear Communication"], scores:[30,20,45,5]}
-            ],
-            4:[
-                { text:"What is Ambiguity?", options:["Undefined Context","Multiple Perspectives","Meaning Uncertainty","Interpretive Flexibility"], scores:[30,20,45,5]},
-                { text:"What is Agility?", options:["Operational Flexibility","Change Readiness","Adaptive Capability","Rapid Responsiveness"], scores:[20,45,30,5]}
-            ]
-        };
-
-        this.percentagePoints={45:5000,30:3000,20:2000,5:500};
-        this.userData=JSON.parse(localStorage.getItem('vucaUser'))||{};
-        this.gameData={
-            players: JSON.parse(localStorage.getItem('vucaPlayers'))||[],
-            levels: JSON.parse(localStorage.getItem('vucaLevels'))||{
-                1:{unlockedAt:'00:00',unlocked:true,completed:false},
-                2:{unlockedAt:'11:55',unlocked:false,completed:false},
-                3:{unlockedAt:'14:55',unlocked:false,completed:false},
-                4:{unlockedAt:'16:25',unlocked:false,completed:false}
+    <script>
+        class VucaQuest {
+            constructor() {
+                this.currentLevel = null;
+                this.currentQuestion = 0;
+                this.quizStartTime = null;
+                this.selectedAnswers = {};
+                this.timer = null;
+                this.questionsData = {
+                    1: [{
+                        text: "What is Volatility?",
+                        options: ["Dynamic Conditions", "Market Fluctuation", "Instability", "Rapid Change"],
+                        scores: [20, 45, 30, 5]
+                    }, {
+                        text: "What is Vision?",
+                        options: ["Organizational Purpose", "Strategic Direction", "Long-term Aspiration", "Future Outlook"],
+                        scores: [5, 45, 30, 20]
+                    }],
+                    2: [{
+                        text: "What is Uncertainty?",
+                        options: ["Predictability Limits", "Information Gaps", "Outcome Variability", "Risk Exposure"],
+                        scores: [20, 30, 45, 5]
+                    }, {
+                        text: "What is Understanding?",
+                        options: ["Knowledge Depth", "Situational Awareness", "Context Recognition", "Insight Development"],
+                        scores: [20, 45, 5, 30]
+                    }],
+                    3: [{
+                        text: "What is Complexity?",
+                        options: ["Process Intricacy", "Structural Layers", "Interconnected Systems", "Multiple Variables"],
+                        scores: [30, 5, 45, 20]
+                    }, {
+                        text: "What is Clarity?",
+                        options: ["Transparent Processes", "Focused Messaging", "Defined Objectives", "Clear Communication"],
+                        scores: [30, 20, 45, 5]
+                    }],
+                    4: [{
+                        text: "What is Ambiguity?",
+                        options: ["Undefined Context", "Multiple Perspectives", "Meaning Uncertainty", "Interpretive Flexibility"],
+                        scores: [30, 20, 45, 5]
+                    }, {
+                        text: "What is Agility?",
+                        options: ["Operational Flexibility", "Change Readiness", "Adaptive Capability", "Rapid Responsiveness"],
+                        scores: [20, 45, 30, 5]
+                    }]
+                };
+                this.percentagePoints = {
+                    45: 5000,
+                    30: 3000,
+                    20: 2000,
+                    5: 500
+                };
+                this.userData = JSON.parse(localStorage.getItem('vucaUser')) || {};
+                this.gameData = {
+                    players: JSON.parse(localStorage.getItem('vucaPlayers')) || [],
+                    levels: JSON.parse(localStorage.getItem('vucaLevels')) || {
+                        1: {
+                            unlockedAt: '00:00',
+                            unlocked: true,
+                            completed: false
+                        },
+                        2: {
+                            unlockedAt: '11:55',
+                            unlocked: false,
+                            completed: false
+                        },
+                        3: {
+                            unlockedAt: '14:55',
+                            unlocked: false,
+                            completed: false
+                        },
+                        4: {
+                            unlockedAt: '16:25',
+                            unlocked: false,
+                            completed: false
+                        }
+                    }
+                };
             }
-        };
-    }
 
-    getISTTime(){
-        const now=new Date();
-        return now.toLocaleTimeString('en-GB',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:false});
-    }
-
-    updateLevelLocks(){
-        const currentIST=this.getISTTime();
-        Object.keys(this.gameData.levels).forEach(level=>{
-            const unlockTime=this.gameData.levels[level].unlockedAt;
-            this.gameData.levels[level].unlocked = level==='1' ? true : currentIST>=unlockTime;
-        });
-
-        Object.keys(this.gameData.levels).forEach(level=>{
-            const tile=document.querySelector(`[data-level="${level}"]`);
-            if(!tile) return;
-            if(this.gameData.levels[level].unlocked && !this.gameData.levels[level].completed){
-                tile.className='tile unlocked';
-                tile.innerHTML=`<div>LEVEL ${level}</div>`;
-            } else if(this.gameData.levels[level].completed){
-                tile.className='tile unlocked';
-                tile.innerHTML=`<div>LEVEL ${level} ✓</div>`;
-            } else {
-                tile.className='tile locked';
-                tile.innerHTML=`<div class="lock-icon">🔒</div><div>LEVEL ${level}</div>`;
+            getISTTime() {
+                const now = new Date();
+                return now.toLocaleTimeString('en-GB', {
+                    timeZone: 'Asia/Kolkata',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
             }
-        });
-        this.saveProgress();
-    }
 
-    goToPage(n){
-        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-        document.getElementById('page'+n).classList.add('active');
-        if(n===2) this.updateLevelLocks();
-        if(n===4) this.simulateLeaderboard();
-    }
+            updateLevelLocks() {
+                const currentIST = this.getISTTime();
+                Object.keys(this.gameData.levels).forEach(level => {
+                    const unlockTime = this.gameData.levels[level].unlockedAt;
+                    this.gameData.levels[level].unlocked = level === '1' ? true : currentIST >= unlockTime;
+                });
+                Object.keys(this.gameData.levels).forEach(level => {
+                    const tile = document.querySelector(`[data-level="${level}"]`);
+                    if (!tile) return;
+                    if (this.gameData.levels[level].unlocked && !this.gameData.levels[level].completed) {
+                        tile.className = 'tile unlocked';
+                        tile.innerHTML = `<div>LEVEL ${level}</div>`;
+                    } else if (this.gameData.levels[level].completed) {
+                        tile.className = 'tile unlocked';
+                        tile.innerHTML = `<div>LEVEL ${level} ✓</div>`;
+                    } else {
+                        tile.className = 'tile locked';
+                        tile.innerHTML = `<div class="lock-icon">🔒</div><div>LEVEL ${level}</div>`;
+                    }
+                });
+                this.saveProgress();
+            }
 
-    handleTileClick(level){
-        if(!this.gameData.levels[level].unlocked){
-            document.getElementById('lockModal').style.display='flex';
-            return;
+            goToPage(n) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page' + n).classList.add('active');
+                if (n === 2) this.updateLevelLocks();
+                if (n === 4) this.simulateLeaderboard();
+            }
+
+            handleTileClick(level) {
+                if (!this.gameData.levels[level].unlocked) {
+                    document.getElementById('lockModal').style.display = 'flex';
+                    return;
+                }
+                if (this.gameData.levels[level].completed) {
+                    alert('Level already completed!');
+                    return;
+                }
+                this.currentLevel = level;
+                this.currentQuestion = 0;
+                this.selectedAnswers = {};
+                this.quizStartTime = Date.now();
+                document.getElementById('quizTitle').textContent = `Level ${level} Challenge`;
+                this.goToPage(3);
+                this.showQuestion();
+            }
+
+            showQuestion() {
+                const qData = this.questionsData[this.currentLevel][this.currentQuestion];
+                const qNum = this.currentQuestion + 1;
+                const total = 2;
+                let html = `<div class="question-block">
+<div class="question-header">
+<div class="question-title">Q${qNum} of ${total}: ${qData.text}</div>
+<div class="countdown" id="countdown">03:00</div>
+</div>
+<div class="options" data-question="${this.currentQuestion}">`;
+                qData.options.forEach((opt, i) => {
+                    html += `<div class="option" data-answer="${i}">${opt}</div>`;
+                });
+                html += '</div></div>';
+                document.getElementById('questionContainer').innerHTML = html;
+                document.getElementById('questionSubmit').style.display = 'block';
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.addEventListener('click', e => {
+                        const qIdx = parseInt(e.currentTarget.closest('.options').dataset.question);
+                        document.querySelectorAll(`[data-question="${qIdx}"] .option`).forEach(o => o.classList.remove('selected'));
+                        e.currentTarget.classList.add('selected');
+                        this.selectedAnswers[qIdx] = parseInt(e.currentTarget.dataset.answer);
+                    });
+                });
+                this.startQuestionCountdown();
+            }
+
+            startQuestionCountdown() {
+                if (this.timer) clearInterval(this.timer);
+                let timeLeft = 180;
+                const el = document.getElementById('countdown');
+                this.timer = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft <= 0) {
+                        clearInterval(this.timer);
+                        this.submitQuestion();
+                        return;
+                    }
+                    const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+                    const s = String(timeLeft % 60).padStart(2, '0');
+                    el.textContent = `${m}:${s}`;
+                    if (timeLeft <= 60) el.classList.add('warning');
+                    if (timeLeft <= 30) el.classList.add('danger');
+                }, 1000);
+            }
+
+            submitQuestion() {
+                if (this.selectedAnswers[this.currentQuestion] === undefined) {
+                    alert('Please select an answer first!');
+                    return;
+                }
+                if (this.currentQuestion === 0) {
+                    this.currentQuestion = 1;
+                    this.showQuestion();
+                } else {
+                    this.submitQuiz();
+                }
+            }
+
+            submitQuiz() {
+                if (this.timer) clearInterval(this.timer);
+                let totalScore = 0;
+                for (let q = 0; q < 2; q++) {
+                    const idx = this.selectedAnswers[q];
+                    if (idx !== undefined) {
+                        const perc = this.questionsData[this.currentLevel][q].scores[idx];
+                        totalScore += this.percentagePoints[perc] || 0;
+                    }
+                }
+                const totalTime = Math.floor((Date.now() - this.quizStartTime) / 1000);
+                const timePts = totalTime <= 30 ? 5000 : totalTime <= 60 ? 3000 : totalTime <= 120 ? 2000 : 500;
+                const finalScore = totalScore + timePts;
+                this.gameData.players = this.gameData.players.filter(p => p.email !== this.userData.email);
+                this.gameData.players.push({
+                    ...this.userData,
+                    level: this.currentLevel,
+                    score: finalScore,
+                    timeTaken: totalTime,
+                    timestamp: Date.now()
+                });
+                this.gameData.levels[this.currentLevel].completed = true;
+                this.saveProgress();
+                this.goToPage(4);
+            }
+
+            saveProgress() {
+                localStorage.setItem('vucaUser', JSON.stringify(this.userData));
+                localStorage.setItem('vucaPlayers', JSON.stringify(this.gameData.players));
+                localStorage.setItem('vucaLevels', JSON.stringify(this.gameData.levels));
+            }
+
+            simulateLeaderboard() {
+                const top5 = this.getTopPlayers(5);
+                const my = this.getMyRank();
+                const displayName = this.userData.name ? `${this.userData.name} ${this.userData.surname||''}` : 'You';
+                document.getElementById('top5').innerHTML = top5.map((p, i) =>
+                    `<div class="player-row"><span class="rank">#${i+1}</span><span>${p.name} ${p.surname} - ${p.score.toLocaleString()} pts (L${p.level})</span></div>`
+                ).join('');
+                document.getElementById('myRank').innerHTML =
+                    `<div class="player-row me">
+<span class="rank">#${my.rank}</span>
+<span>${displayName} - ${my.score?.toLocaleString()||0} pts</span>
+</div>
+<div style="text-align:center;margin-top:1rem;font-size:0.9rem;opacity:0.8;">
+Total Players: ${this.gameData.players.length} | Live Updates
+</div>`;
+            }
+
+            getTopPlayers(c) {
+                return [...this.gameData.players].sort((a, b) => b.score - a.score).slice(0, c);
+            }
+
+            getMyRank() {
+                const sorted = [...this.gameData.players].sort((a, b) => b.score - a.score).map((p, i) => ({
+                    ...p,
+                    rank: i + 1
+                }));
+                const me = sorted.find(p => p.email === this.userData.email);
+                return me || {
+                    rank: this.gameData.players.length + 1,
+                    score: 0
+                };
+            }
         }
-        if(this.gameData.levels[level].completed){
-            alert('Level already completed!');
-            return;
-        }
-        this.currentLevel=level;
-        this.currentQuestion=0;
-        this.selectedAnswers={};
-        this.quizStartTime=Date.now();
-        document.getElementById('quizTitle').textContent=`Level ${level} Challenge`;
-        this.goToPage(3);
-        this.showQuestion();
-    }
 
-    showQuestion(){
-        const qData=this.questionsData[this.currentLevel][this.currentQuestion];
-        const qNum=this.currentQuestion+1;
-        const total=2;
+        const vucaQuest = new VucaQuest();
 
-        let html=`<div class="question-block">
-            <div class="question-header">
-                <div class="question-title">Q${qNum} of ${total}: ${qData.text}</div>
-                <div class="countdown" id="countdown">03:00</div>
-            </div>
-            <div class="options" data-question="${this.currentQuestion}">`;
-
-        qData.options.forEach((opt,i)=>{
-            html+=`<div class="option" data-answer="${i}">${opt}</div>`;
-        });
-        html+='</div></div>';
-
-        document.getElementById('questionContainer').innerHTML=html;
-        document.getElementById('questionSubmit').style.display='block';
-
-        document.querySelectorAll('.option').forEach(opt=>{
-            opt.addEventListener('click',e=>{
-                const qIdx=parseInt(e.currentTarget.closest('.options').dataset.question);
-                document.querySelectorAll(`[data-question="${qIdx}"] .option`).forEach(o=>o.classList.remove('selected'));
-                e.currentTarget.classList.add('selected');
-                this.selectedAnswers[qIdx]=parseInt(e.currentTarget.dataset.answer);
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('userForm').addEventListener('submit', e => {
+                e.preventDefault();
+                vucaQuest.userData = {
+                    name: document.getElementById('name').value,
+                    surname: document.getElementById('surname').value,
+                    email: document.getElementById('email').value
+                };
+                vucaQuest.saveProgress();
+                vucaQuest.goToPage(2);
             });
-        });
 
-        this.startQuestionCountdown();
-    }
+            document.getElementById('questionSubmit').addEventListener('click', () => vucaQuest.submitQuestion());
 
-    startQuestionCountdown(){
-        if(this.timer) clearInterval(this.timer);
-        let timeLeft=180;
-        const el=document.getElementById('countdown');
+            document.querySelectorAll('.tile').forEach(t => {
+                t.addEventListener('click', e => {
+                    vucaQuest.handleTileClick(parseInt(e.currentTarget.dataset.level));
+                });
+            });
 
-        this.timer=setInterval(()=>{
-            timeLeft--;
-            if(timeLeft<=0){
-                clearInterval(this.timer);
-                this.submitQuestion();
-                return;
+            // ⭐ FIXED: Star icon click handler
+            const starIcon = document.querySelector('.leaderboard-icon');
+            if (starIcon) {
+                starIcon.addEventListener('click', () => {
+                    vucaQuest.goToPage(4);
+                });
             }
-            const m=String(Math.floor(timeLeft/60)).padStart(2,'0');
-            const s=String(timeLeft%60).padStart(2,'0');
-            el.textContent=`${m}:${s}`;
-            if(timeLeft<=60) el.classList.add('warning');
-            if(timeLeft<=30) el.classList.add('danger');
-        },1000);
-    }
 
-    submitQuestion(){
-        if(this.selectedAnswers[this.currentQuestion]===undefined){
-            alert('Please select an answer first!');
-            return;
-        }
-        if(this.currentQuestion===0){
-            this.currentQuestion=1;
-            this.showQuestion();
-        } else { this.submitQuiz(); }
-    }
-
-    submitQuiz(){
-        if(this.timer) clearInterval(this.timer);
-        let totalScore=0;
-        for(let q=0;q<2;q++){
-            const idx=this.selectedAnswers[q];
-            if(idx!==undefined){
-                const perc=this.questionsData[this.currentLevel][q].scores[idx];
-                totalScore+= this.percentagePoints[perc]||0;
-            }
-        }
-        const totalTime=Math.floor((Date.now()-this.quizStartTime)/1000);
-        const timePts= totalTime<=30?5000 : totalTime<=60?3000 : totalTime<=120?2000 : 500;
-        const finalScore= totalScore+timePts;
-
-        this.gameData.players=this.gameData.players.filter(p=>p.email!==this.userData.email);
-
-        this.gameData.players.push({
-            ...this.userData,
-            level:this.currentLevel,
-            score:finalScore,
-            timeTaken:totalTime,
-            timestamp:Date.now()
+            vucaQuest.updateLevelLocks();
+            setInterval(() => vucaQuest.updateLevelLocks(), 30000);
+            
+            if (vucaQuest.userData.email) vucaQuest.goToPage(2);
         });
-
-        this.gameData.levels[this.currentLevel].completed=true;
-        this.saveProgress();
-        this.goToPage(4);
-    }
-
-    saveProgress(){
-        localStorage.setItem('vucaUser',JSON.stringify(this.userData));
-        localStorage.setItem('vucaPlayers',JSON.stringify(this.gameData.players));
-        localStorage.setItem('vucaLevels',JSON.stringify(this.gameData.levels));
-    }
-
-    simulateLeaderboard(){
-        const top5=this.getTopPlayers(5);
-        const my=this.getMyRank();
-        const displayName=this.userData.name ? `${this.userData.name} ${this.userData.surname||''}` : 'You';
-
-        document.getElementById('top5').innerHTML=top5.map((p,i)=>
-            `<div class="player-row"><span class="rank">#${i+1}</span><span>${p.name} ${p.surname} - ${p.score.toLocaleString()} pts (L${p.level})</span></div>`
-        ).join('');
-
-        document.getElementById('myRank').innerHTML=`
-            <div class="player-row me">
-                <span class="rank">#${my.rank}</span>
-                <span>${displayName} - ${my.score?.toLocaleString()||0} pts</span>
-            </div>
-            <div style="text-align:center;margin-top:1rem;font-size:0.9rem;opacity:0.8;">
-                Total Players: ${this.gameData.players.length} | Live Updates
-            </div>`;
-    }
-
-    getTopPlayers(c){ return [...this.gameData.players].sort((a,b)=>b.score-a.score).slice(0,c); }
-
-    getMyRank(){
-        const sorted=[...this.gameData.players].sort((a,b)=>b.score-a.score).map((p,i)=>({...p,rank:i+1}));
-        const me=sorted.find(p=>p.email===this.userData.email);
-        return me||{rank:this.gameData.players.length+1,score:0};
-    }
-}
-
-const vucaQuest=new VucaQuest();
-
-document.addEventListener('DOMContentLoaded',()=>{
-    document.getElementById('userForm').addEventListener('submit',e=>{
-        e.preventDefault();
-        vucaQuest.userData={
-            name: name.value,
-            surname: surname.value,
-            email: email.value
-        };
-        vucaQuest.saveProgress();
-        vucaQuest.goToPage(2);
-    });
-
-    document.getElementById('questionSubmit').addEventListener('click',()=>vucaQuest.submitQuestion());
-
-    document.querySelectorAll('.tile').forEach(t=>{
-        t.addEventListener('click',e=>{
-            vucaQuest.handleTileClick(parseInt(e.currentTarget.dataset.level));
-        });
-    });
-
-    vucaQuest.updateLevelLocks();
-    setInterval(()=>vucaQuest.updateLevelLocks(),30000);
-
-    if(vucaQuest.userData.email) vucaQuest.goToPage(2);
-});
-</script>
+    </script>
 </body>
 </html>
+
